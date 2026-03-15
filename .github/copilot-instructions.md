@@ -1,30 +1,47 @@
 # Copilot Instructions
 
-<!-- This file provides context to GitHub Copilot when working in this repository. -->
-<!-- Update it as the project evolves to keep Copilot sessions effective. -->
+## Build & Run
 
-## Build & Test
+```sh
+# Backend
+cd backend
+pip install -r requirements.txt
+uvicorn main:app --reload          # runs on :8000
 
-<!-- Add build, test, and lint commands as they are introduced. Example: -->
-<!-- ```sh -->
-<!-- npm install        # install dependencies -->
-<!-- npm run build      # build the project -->
-<!-- npm test           # run all tests -->
-<!-- npm test -- --grep "pattern"  # run a single test by name -->
-<!-- npm run lint       # lint the codebase -->
-<!-- ``` -->
+# Frontend
+cd frontend
+npm install
+npm run dev                        # runs on :5173
+npm run build                      # production build
+```
+
+### Environment Variables (backend)
+
+Copy `.env.example` to `.env` and fill in:
+- `AZURE_OPENAI_API_KEY` — Azure OpenAI API key
+- `AZURE_OPENAI_ENDPOINT` — e.g. `https://<resource>.openai.azure.com`
+- `AZURE_OPENAI_DEPLOYMENT` — deployment name (default: `gpt-4o`)
 
 ## Architecture
 
-<!-- Describe the high-level structure once the project takes shape. Example: -->
-<!-- - `src/api/` — REST API layer (Express routes and middleware) -->
-<!-- - `src/core/` — Business logic, independent of transport layer -->
-<!-- - `src/db/` — Database access via repository pattern -->
-<!-- Entry point: `src/index.ts` -->
+- **`backend/`** — FastAPI server
+  - `services/dataset.py` — CSV parsing & profiling (pandas). Returns `DatasetProfile` with column types, stats, missing %.
+  - `services/llm.py` — Azure OpenAI client. Sends structured prompts, expects JSON responses.
+  - `services/advisor.py` — Orchestrator. Builds prompt from dataset profile + problem description, parses LLM response into `ModelSuggestion` and `VizSuggestion`.
+  - `routers/analyze.py` — Single `POST /api/analyze` endpoint (multipart: problem + CSV file).
+  - `models/schemas.py` — All Pydantic request/response models.
+
+- **`frontend/`** — React + TypeScript (Vite)
+  - `src/api/client.ts` — Typed API client (axios).
+  - `src/components/ProblemForm.tsx` — Problem input + CSV upload.
+  - `src/components/ModelCards.tsx` — Renders model suggestions with pros/cons.
+  - `src/components/CodeViewer.tsx` — Syntax-highlighted Python code with copy button.
+  - `src/components/VizSuggestions.tsx` — Visualization recommendations with code.
+  - `src/components/DatasetOverview.tsx` — Dataset profile table.
 
 ## Conventions
 
-<!-- Document project-specific patterns that aren't obvious from a single file. Example: -->
-<!-- - All async functions return `Result<T, AppError>` instead of throwing -->
-<!-- - Environment config is loaded once in `src/config.ts` and injected via context -->
-<!-- - Database migrations live in `migrations/` and are run with `npm run migrate` -->
+- Backend schemas are defined once in `models/schemas.py` and shared across all services.
+- The LLM service always uses `response_format: json_object` to get parseable JSON back.
+- Frontend types in `api/client.ts` mirror the backend Pydantic models — keep them in sync.
+- All LLM prompts live in `services/advisor.py` as module-level constants.
