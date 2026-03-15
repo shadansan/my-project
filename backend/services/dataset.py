@@ -7,7 +7,11 @@ from models.schemas import ColumnProfile, DatasetProfile
 
 def profile_dataset(file_bytes: bytes) -> DatasetProfile:
     """Parse a CSV file and return a structured profile of the dataset."""
-    df = pd.read_csv(io.BytesIO(file_bytes))
+    # Try parsing normally first; if too many "Unnamed" columns, try skipping rows
+    df = _smart_read_csv(file_bytes)
+
+    # Drop columns that are entirely empty
+    df = df.dropna(axis=1, how="all")
 
     columns: list[ColumnProfile] = []
     for col in df.columns:
@@ -32,6 +36,24 @@ def profile_dataset(file_bytes: bytes) -> DatasetProfile:
         column_count=len(df.columns),
         columns=columns,
     )
+
+
+def _smart_read_csv(file_bytes: bytes) -> pd.DataFrame:
+    """Read CSV, auto-detecting and skipping metadata header rows."""
+    # Try with no rows skipped first
+    for skip in range(5):
+        try:
+            df = pd.read_csv(io.BytesIO(file_bytes), skiprows=skip)
+        except Exception:
+            continue
+
+        unnamed_count = sum(1 for c in df.columns if str(c).startswith("Unnamed"))
+        # If more than half the columns are unnamed, the real header is probably below
+        if unnamed_count <= len(df.columns) // 2:
+            return df
+
+    # Fallback: just read as-is
+    return pd.read_csv(io.BytesIO(file_bytes))
 
 
 def _friendly_dtype(series: pd.Series) -> str:
