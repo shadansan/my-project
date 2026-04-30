@@ -1,22 +1,35 @@
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --text: #5f6368;
+  --text-h: #1a1a2e;
+  --muted: #8b8fa3;
+  --bg: #fafbfc;
+  --bg-elevated: #ffffff;
+  --border: #e2e5ea;
+  --border-light: #f0f1f4;
+  --code-bg: #f5f6f8;
+  --accent: #0078d4;
+  --accent-hover: #106ebe;
+  --accent-bg: rgba(0, 120, 212, 0.08);
+  --accent-border: rgba(0, 120, 212, 0.3);
+  --success: #107c10;
+  --success-bg: rgba(16, 124, 16, 0.08);
+  --warning: #d4800a;
+  --warning-bg: rgba(212, 128, 10, 0.08);
+  --danger: #d13438;
+  --danger-bg: rgba(209, 52, 56, 0.08);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.1), 0 2px 6px rgba(0,0,0,0.06);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  --sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --heading: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --mono: 'Cascadia Code', 'Fira Code', ui-monospace, Consolas, monospace;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
+  font: 15px/1.6 var(--sans);
+  letter-spacing: 0.01em;
   color-scheme: light dark;
   color: var(--text);
   background: var(--bg);
@@ -24,38 +37,39 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
+    --text: #b0b4c0;
+    --text-h: #e8eaed;
+    --muted: #6b7080;
+    --bg: #1b1c24;
+    --bg-elevated: #242530;
+    --border: #33353f;
+    --border-light: #2a2c36;
+    --code-bg: #20212b;
+    --accent: #4ea8f0;
+    --accent-hover: #6cb8f5;
+    --accent-bg: rgba(78, 168, 240, 0.12);
+    --accent-border: rgba(78, 168, 240, 0.35);
+    --success: #5db85d;
+    --success-bg: rgba(93, 184, 93, 0.12);
+    --warning: #e8a33e;
+    --warning-bg: rgba(232, 163, 62, 0.12);
+    --danger: #ef6a6d;
+    --danger-bg: rgba(239, 106, 109, 0.12);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.4);
   }
 }
 
 #root {
-  width: 1126px;
+  width: 1080px;
   max-width: 100%;
   margin: 0 auto;
   text-align: center;
-  border-inline: 1px solid var(--border);
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -66,46 +80,44 @@ body {
   margin: 0;
 }
 
-h1,
-h2 {
+h1, h2, h3 {
   font-family: var(--heading);
-  font-weight: 500;
   color: var(--text-h);
 }
-
 h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  margin: 0 0 4px;
 }
 h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.2px;
+  margin: 0 0 12px;
 }
-p {
+h3 {
+  font-size: 16px;
+  font-weight: 600;
   margin: 0;
 }
+p { margin: 0; }
 
-code,
-.counter {
+code, .counter {
   font-family: var(--mono);
   display: inline-flex;
   border-radius: 4px;
   color: var(--text-h);
 }
-
 code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
+  font-size: 13px;
+  line-height: 1.4;
+  padding: 3px 7px;
   background: var(--code-bg);
+}
+
+::selection {
+  background: var(--accent-bg);
+  color: var(--accent);
 }

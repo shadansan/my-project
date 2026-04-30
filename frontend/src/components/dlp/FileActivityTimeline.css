@@ -1,0 +1,390 @@
+/* ══════════════════════════════════════════════
+   File Activity Timeline — Vertical Spine Layout
+   ══════════════════════════════════════════════ */
+
+.tl-container {
+  text-align: left;
+  max-width: 840px;
+  margin: 0 auto;
+}
+
+/* ── File Identity Card ── */
+.tl-file-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px 24px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+}
+.tl-file-icon {
+  font-size: 28px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-bg);
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+}
+.tl-file-info {
+  flex: 1;
+  min-width: 0;
+}
+.tl-file-name {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 600;
+}
+.tl-file-path {
+  display: block;
+  font-size: 12px;
+  padding: 3px 8px;
+  margin-bottom: 8px;
+  word-break: break-all;
+}
+.tl-file-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ── Time Range Bar ── */
+.tl-range-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 12px 16px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+.tl-range-start,
+.tl-range-end {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-h);
+  white-space: nowrap;
+  font-family: var(--mono);
+}
+.tl-range-line {
+  flex: 1;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--danger), var(--warning));
+  border-radius: 2px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tl-range-stats {
+  position: absolute;
+  top: -20px;
+  display: flex;
+  gap: 12px;
+}
+.tl-range-stat {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.tl-stat-block {
+  color: var(--danger);
+}
+.tl-stat-audit {
+  color: var(--warning);
+}
+
+/* ══════════════════════════════════════════════
+   VERTICAL TIMELINE
+   ══════════════════════════════════════════════ */
+.tl-vertical {
+  position: relative;
+  padding-left: 40px;
+}
+
+/* The vertical spine line */
+.tl-vertical::before {
+  content: "";
+  position: absolute;
+  left: 18px;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(
+    to bottom,
+    var(--accent) 0%,
+    var(--border) 15%,
+    var(--border) 85%,
+    var(--muted) 100%
+  );
+  border-radius: 2px;
+}
+
+/* ── Timeline Node ── */
+.tl-node {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+/* Spine with dot */
+.tl-spine {
+  position: absolute;
+  left: -40px;
+  top: 0;
+  width: 40px;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 14px;
+}
+.tl-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 3px solid var(--border);
+  background: var(--bg-elevated);
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+/* Dot colors by event type */
+.tl-node-file-start .tl-dot {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+  width: 14px;
+  height: 14px;
+}
+.tl-node-sit-detected .tl-dot {
+  border-color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.15);
+  width: 14px;
+  height: 14px;
+}
+.tl-node-policy-change .tl-dot {
+  border-color: var(--success);
+  background: var(--success-bg);
+  width: 14px;
+  height: 14px;
+}
+.tl-node-end .tl-dot {
+  border-color: var(--muted);
+  background: var(--bg);
+  width: 14px;
+  height: 14px;
+}
+
+/* Activity dots — colored by enforcement mode */
+.tl-node-activity .tl-dot {
+  width: 10px;
+  height: 10px;
+}
+.tl-node-activity:has(.tl-badge-block) .tl-dot {
+  border-color: var(--danger);
+  background: var(--danger-bg);
+}
+.tl-node-activity:has(.tl-badge-audit) .tl-dot {
+  border-color: var(--warning);
+  background: var(--warning-bg);
+}
+
+/* ── Timeline Card ── */
+.tl-card {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+}
+.tl-node-activity .tl-card {
+  cursor: pointer;
+}
+.tl-node-activity .tl-card:hover {
+  background: var(--bg);
+  border-color: var(--border-light);
+}
+.tl-node-activity.expanded .tl-card {
+  background: var(--bg);
+  border-color: var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Non-activity cards (SIT, policy, start/end) get a distinct look */
+.tl-node-file-start .tl-card,
+.tl-node-sit-detected .tl-card,
+.tl-node-policy-change .tl-card,
+.tl-node-end .tl-card {
+  background: var(--bg-elevated);
+  border-color: var(--border);
+  box-shadow: var(--shadow-sm);
+  padding: 14px 18px;
+  margin-bottom: 8px;
+}
+
+/* Timestamp */
+.tl-timestamp {
+  font-size: 11px;
+  font-family: var(--mono);
+  color: var(--muted);
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* Event body */
+.tl-event-body {
+  /* wrapper */
+}
+.tl-event-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.tl-event-title strong {
+  font-size: 13px;
+  color: var(--text-h);
+}
+.tl-icon {
+  font-size: 15px;
+}
+.tl-event-desc {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* ── Badges ── */
+.tl-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.tl-badge-block {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+.tl-badge-audit {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+.tl-badge-sit {
+  background: rgba(139, 92, 246, 0.12);
+  color: #8b5cf6;
+}
+.tl-badge-active {
+  background: var(--success-bg);
+  color: var(--success);
+}
+.tl-badge-inactive {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+
+/* ── SIT Grid ── */
+.tl-sit-grid {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.tl-sit-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+}
+.tl-sit-name {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-h);
+}
+.tl-sit-count {
+  font-size: 12px;
+  font-family: var(--mono);
+  color: var(--muted);
+}
+.tl-confidence {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 8px;
+}
+.tl-confidence.high {
+  background: var(--success-bg);
+  color: var(--success);
+}
+.tl-confidence.med {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+.tl-confidence.low {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+/* ── Policy Detail ── */
+.tl-policy-detail {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+}
+.tl-policy-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-h);
+  display: block;
+  margin-bottom: 4px;
+}
+.tl-policy-meta {
+  display: flex;
+  gap: 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ── Activity Expanded Details ── */
+.tl-activity-details {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border-light);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.tl-detail-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.tl-detail-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  min-width: 100px;
+}
+.tl-detail-value {
+  font-size: 13px;
+  color: var(--text-h);
+}

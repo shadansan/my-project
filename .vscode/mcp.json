@@ -1,0 +1,12 @@
+{
+  "servers": {
+    "security360": {
+      "type": "http",
+      "url": "https://security360-mcp.azurewebsites.net/mcp",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${input:security360-api-key}"
+      }
+    }
+  }
+}
